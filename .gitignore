@@ -2,3 +2,5 @@ target/
 .metadata/
 repo/
 RemoteSystemsTempFiles
+tags
+Doxygen
