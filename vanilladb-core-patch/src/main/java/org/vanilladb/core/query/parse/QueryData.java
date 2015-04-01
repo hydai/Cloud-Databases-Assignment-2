@@ -20,14 +20,16 @@ public class QueryData {
 	private Set<AggregationFn> aggFn;
 	private List<String> sortFields;
 	private List<Integer> sortDirs;
+	private boolean isExplain;
 
 	/**
 	 * Saves the field and table list and predicate.
 	 */
-	public QueryData(Set<String> projFields,
+	public QueryData(boolean isExplain, Set<String> projFields,
 			Set<String> tables, Predicate pred, Set<String> groupFields,
 			Set<AggregationFn> aggFn, List<String> sortFields,
 			List<Integer> sortDirs) {
+		this.isExplain = isExplain;
 		this.projFields = projFields;
 		this.tables = tables;
 		this.pred = pred;
@@ -102,8 +104,19 @@ public class QueryData {
 		return aggFn;
 	}
 
+	/**
+	 * Returns true if the query is an explain statement.
+	 * 
+	 * @return true if the query is an explain statement
+	 */
+	public boolean isExplain() {
+		return isExplain;
+	}
+
 	public String toString() {
 		StringBuilder result = new StringBuilder();
+		if (isExplain)
+			result.append("explain ");
 		result.append("select ");
 		for (String fldname : projFields)
 			result.append(fldname + ", ");

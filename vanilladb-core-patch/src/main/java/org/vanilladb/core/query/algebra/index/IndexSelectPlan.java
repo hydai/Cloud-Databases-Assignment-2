@@ -101,4 +101,17 @@ public class IndexSelectPlan implements Plan {
 	public long recordsOutput() {
 		return (long) histogram().recordsOutput();
 	}
+
+	@Override
+	public String toString() {
+		String c = tp.toString();
+		String[] cs = c.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->");
+		sb.append("IndexSelectPlan cond:" + searchRange.toString() + " (#blks="
+				+ blocksAccessed() + ", #recs=" + recordsOutput() + ")\n");
+		for (String child : cs)
+			sb.append("\t").append(child).append("\n");
+		return sb.toString();
+	}
 }

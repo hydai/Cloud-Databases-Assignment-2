@@ -177,6 +177,7 @@ public class Lexer {
 				"into", "values", "delete", "update", "set", "create", "table",
 				"int", "double", "varchar", "view", "as", "index", "on",
 				"long", "order", "by", "asc", "desc", "sum", "count", "avg",
-				"min", "max", "distinct", "group", "add", "sub", "mul", "div");
+				"min", "max", "distinct", "group", "add", "sub", "mul", "div",
+				"explain");
 	}
 }

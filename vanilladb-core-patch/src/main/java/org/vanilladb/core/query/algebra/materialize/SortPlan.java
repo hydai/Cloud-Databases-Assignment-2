@@ -250,10 +250,51 @@ public class SortPlan implements Plan {
 		return result;
 	}
 
+	private TempTable mergeTwoRuns(TempTable p1, TempTable p2) {
+		Scan src1 = p1.open();
+		Scan src2 = p2.open();
+		TempTable result = new TempTable(schema, tx);
+		UpdateScan dest = result.open();
+		src1.beforeFirst();
+		src2.beforeFirst();
+		boolean hasmore1 = src1.next();
+		boolean hasmore2 = src2.next();
+		while (hasmore1 && hasmore2) {
+			if (comp.compare(src1, src2) < 0)
+				hasmore1 = copy(src1, dest);
+			else
+				hasmore2 = copy(src2, dest);
+		}
+		if (hasmore1)
+			while (hasmore1)
+				hasmore1 = copy(src1, dest);
+		else
+			while (hasmore2)
+				hasmore2 = copy(src2, dest);
+		src1.close();
+		src2.close();
+		dest.close();
+		return result;
+	}
+
 	private boolean copy(Scan src, UpdateScan dest) {
 		dest.insert();
 		for (String fldname : schema.fields())
 			dest.setVal(fldname, src.getVal(fldname));
 		return src.next();
+	}
+
+	@Override
+	public String toString() {
+		String c = p.toString();
+		String[] cs = c.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->");
+		sb.append("SortPlan (#blks=" + blocksAccessed() + ", #recs="
+				+ recordsOutput() + ")\n");
+		for (String child : cs)
+			sb.append("\t").append(child).append("\n");
+		;
+		return sb.toString();
 	}
 }

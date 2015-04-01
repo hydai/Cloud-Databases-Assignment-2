@@ -103,4 +103,25 @@ public class MergeJoinPlan extends AbstractJoinPlan {
 	public long recordsOutput() {
 		return (int) hist.recordsOutput();
 	}
+
+	@Override
+	public String toString() {
+		String c2 = sp2.toString();
+		String[] cs2 = c2.split("\n");
+		String c1 = sp1.toString();
+		String[] cs1 = c1.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->");
+		sb.append("MergeJoinPlan (#blks=" + blocksAccessed() + ", #recs="
+				+ recordsOutput() + ")\n");
+		// right child
+		for (String child : cs2)
+			sb.append("\t").append(child).append("\n");
+		;
+		// left child
+		for (String child : cs1)
+			sb.append("\t").append(child).append("\n");
+		;
+		return sb.toString();
+	}
 }

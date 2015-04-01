@@ -123,4 +123,22 @@ public class ProductPlan implements Plan {
 	public long recordsOutput() {
 		return (long) histogram().recordsOutput();
 	}
+
+	@Override
+	public String toString() {
+		String c2 = p2.toString();
+		String[] cs2 = c2.split("\n");
+		String c1 = p1.toString();
+		String[] cs1 = c1.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->ProductPlan  (#blks=" + blocksAccessed() + ", #recs="
+				+ recordsOutput() + ")\n");
+		// right child
+		for (String child : cs2)
+			sb.append("\t").append(child).append("\n");
+		// left child
+		for (String child : cs1)
+			sb.append("\t").append(child).append("\n");
+		return sb.toString();
+	}
 }

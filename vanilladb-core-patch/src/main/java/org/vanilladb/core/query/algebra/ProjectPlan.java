@@ -96,4 +96,16 @@ public class ProjectPlan implements Plan {
 	public long recordsOutput() {
 		return (long) histogram().recordsOutput();
 	}
+
+	@Override
+	public String toString() {
+		String c = p.toString();
+		String[] cs = c.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->ProjectPlan  (#blks=" + blocksAccessed() + ", #recs="
+				+ recordsOutput() + ")\n");
+		for (String child : cs)
+			sb.append("\t").append(child).append("\n");
+		return sb.toString();
+	}
 }

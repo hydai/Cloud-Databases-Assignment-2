@@ -3,6 +3,7 @@ package org.vanilladb.core.query.planner.opt;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.vanilladb.core.query.algebra.ExplainPlan;
 import org.vanilladb.core.query.algebra.Plan;
 import org.vanilladb.core.query.algebra.ProjectPlan;
 import org.vanilladb.core.query.algebra.materialize.GroupByPlan;
@@ -58,6 +59,9 @@ public class HeuristicQueryPlanner implements QueryPlanner {
 		if (data.sortFields() != null)
 			trunk = new SortPlan(trunk, data.sortFields(),
 					data.sortDirections(), tx);
+		// Step 7: Add a explain plan if the query is explain statement
+		if (data.isExplain())
+			trunk = new ExplainPlan(trunk);
 		return trunk;
 	}
 

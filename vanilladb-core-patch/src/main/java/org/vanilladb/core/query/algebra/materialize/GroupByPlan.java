@@ -315,4 +315,18 @@ public class GroupByPlan extends ReduceRecordsPlan {
 	public long recordsOutput() {
 		return (long) hist.recordsOutput();
 	}
+
+	@Override
+	public String toString() {
+		String c = sp.toString();
+		String[] cs = c.split("\n");
+		StringBuilder sb = new StringBuilder();
+		sb.append("->");
+		sb.append("GroupByPlan: (#blks=" + blocksAccessed() + ", #recs="
+				+ recordsOutput() + ")\n");
+		for (String child : cs)
+			sb.append("\t").append(child).append("\n");
+		;
+		return sb.toString();
+	}
 }
