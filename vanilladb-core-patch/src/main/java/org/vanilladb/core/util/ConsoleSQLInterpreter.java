@@ -65,34 +65,44 @@ public class ConsoleSQLInterpreter {
 				totalwidth += width;
 				String fmt = "%" + width + "s";
 				if (cmd.startsWith("explain") || cmd.startsWith("EXPLAIN"))
-					System.out.format("%s", md.getColumnName(i));
+					System.out.format("\n");
 				else
 					System.out.format(fmt, md.getColumnName(i));
 			}
 
 			System.out.println();
-			for (int i = 0; i < totalwidth; i++)
-				System.out.print("-");
-			if (!cmd.startsWith("explain") && !cmd.startsWith("EXPLAIN"))
+			if (!cmd.startsWith("explain") && !cmd.startsWith("EXPLAIN")) {
+				for (int i = 0; i < totalwidth; i++)
+					System.out.print("-");
 				System.out.println();
+			}
 
 			rs.beforeFirst();
 			// print records
-			while (rs.next()) {
-				for (int i = 1; i <= numcols; i++) {
-					String fldname = md.getColumnName(i);
-					int fldtype = md.getColumnType(i);
-					String fmt = "%" + md.getColumnDisplaySize(i);
-					if (fldtype == Types.INTEGER)
-						System.out.format(fmt + "d", rs.getInt(fldname));
-					else if (fldtype == Types.BIGINT)
-						System.out.format(fmt + "d", rs.getLong(fldname));
-					else if (fldtype == Types.DOUBLE)
-						System.out.format(fmt + "f", rs.getDouble(fldname));
-					else
-						System.out.format(fmt + "s", rs.getString(fldname));
+			if (cmd.startsWith("explain") || cmd.startsWith("EXPLAIN")) {
+				while (rs.next()) {
+					System.out.println(rs.getString(md.getColumnName(1)));
 				}
-				System.out.println();
+			}
+			else {
+				while (rs.next()) {
+					for (int i = 1; i <= numcols; i++) {
+						String fldname = md.getColumnName(i);
+						int fldtype = md.getColumnType(i);
+
+						String fmt = "%" + md.getColumnDisplaySize(i);
+
+						if (fldtype == Types.INTEGER)
+							System.out.format(fmt + "d", rs.getInt(fldname));
+						else if (fldtype == Types.BIGINT)
+							System.out.format(fmt + "d", rs.getLong(fldname));
+						else if (fldtype == Types.DOUBLE)
+							System.out.format(fmt + "f", rs.getDouble(fldname));
+						else
+							System.out.format(fmt + "s", rs.getString(fldname));
+					}
+					System.out.println();
+				}
 			}
 			rs.close();
 		} catch (SQLException e) {
