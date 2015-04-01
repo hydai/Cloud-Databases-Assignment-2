@@ -20,6 +20,7 @@ public class QueryData {
 	private Set<AggregationFn> aggFn;
 	private List<String> sortFields;
 	private List<Integer> sortDirs;
+	private boolean isExplainQuery;
 
 	/**
 	 * Saves the field and table list and predicate.
@@ -35,8 +36,16 @@ public class QueryData {
 		this.aggFn = aggFn;
 		this.sortFields = sortFields;
 		this.sortDirs = sortDirs;
+		this.isExplainQuery = false;
 	}
 
+	public void setIsExplainQuery(boolean v) {
+		this.isExplainQuery = v;
+	}
+
+	public boolean getIsExplainQuery() {
+		return this.isExplainQuery;
+	}
 	/**
 	 * Returns the fields mentioned in the select clause.
 	 * 

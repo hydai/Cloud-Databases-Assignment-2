@@ -36,6 +36,9 @@ public class Lexer {
 	 * Methods to check the status of the current token.
 	 */
 
+	public String getCurrentToken() {
+		return tok.sval;
+	}
 	/**
 	 * Returns true if the current token is the specified delimiter character.
 	 * 
@@ -177,6 +180,7 @@ public class Lexer {
 				"into", "values", "delete", "update", "set", "create", "table",
 				"int", "double", "varchar", "view", "as", "index", "on",
 				"long", "order", "by", "asc", "desc", "sum", "count", "avg",
-				"min", "max", "distinct", "group", "add", "sub", "mul", "div");
+				"min", "max", "distinct", "group", "add", "sub", "mul", "div",
+				"explain");
 	}
 }
