@@ -44,8 +44,6 @@ public class BasicQueryPlanner implements QueryPlanner {
 			Plan p = plans.get(i++);
 			ret.add("TablePlan on (" + tblname + ") (#blks=" + p.blocksAccessed()
 					+ ", #recs="+p.histogram().recordsOutput() + ")");
-			System.out.println("TablePlan on (" + tblname + ") (#blks=" + p.blocksAccessed()
-					+ ", #recs="+p.histogram().recordsOutput() + ")");
 		}
 		map.put(lv++, ret);
 		ret = new ArrayList<String>();
@@ -56,17 +54,13 @@ public class BasicQueryPlanner implements QueryPlanner {
 			p = new ProductPlan(p, nextplan);
 			ret.add("ProductPlan (#blks=" + p.blocksAccessed()
 					+ ", #recs="+p.histogram().recordsOutput() + ")");
-			System.out.println("ProductPlan (#blks=" + p.blocksAccessed()
-					+ ", #recs="+p.histogram().recordsOutput() + ")");
 		}
 		map.put(lv++, ret);
 		ret = new ArrayList<String>();
 
 		// Step 3: Add a selection plan for the predicate
 		p = new SelectPlan(p, data.pred());
-		ret.add("SelectPlan (#blks=" + p.blocksAccessed()
-				+ ", #recs="+p.histogram().recordsOutput() + ")");
-		System.out.println("SelectPlan (#blks=" + p.blocksAccessed()
+		ret.add("SelectPlan pred: (" + data.pred().toString() + ") (#blks=" + p.blocksAccessed()
 				+ ", #recs="+p.histogram().recordsOutput() + ")");
 		map.put(lv++, ret);
 		ret = new ArrayList<String>();
@@ -78,14 +72,10 @@ public class BasicQueryPlanner implements QueryPlanner {
 				Plan sp = ((GroupByPlan)p).getSp();
 				ret.add("SortPlan (#blks=" + sp.blocksAccessed()
 						+ ", #recs="+sp.histogram().recordsOutput() + ")");
-				System.out.println("SortPlan (#blks=" + sp.blocksAccessed()
-						+ ", #recs="+sp.histogram().recordsOutput() + ")");
 				map.put(lv++, ret);
 				ret = new ArrayList<String>();
 			}
 			ret.add("GroupByPlan (#blks=" + p.blocksAccessed()
-					+ ", #recs="+p.histogram().recordsOutput() + ")");
-			System.out.println("GroupByPlan (#blks=" + p.blocksAccessed()
 					+ ", #recs="+p.histogram().recordsOutput() + ")");
 		}
 		map.put(lv++, ret);
@@ -95,8 +85,6 @@ public class BasicQueryPlanner implements QueryPlanner {
 		p = new ProjectPlan(p, data.projectFields());
 		ret.add("ProjectPlan (#blks=" + p.blocksAccessed()
 				+ ", #recs="+p.histogram().recordsOutput() + ")");
-		System.out.println("ProjectPlan (#blks=" + p.blocksAccessed()
-				+ ", #recs="+p.histogram().recordsOutput() + ")");
 		map.put(lv++, ret);
 		ret = new ArrayList<String>();
 
@@ -104,8 +92,6 @@ public class BasicQueryPlanner implements QueryPlanner {
 		if (data.sortFields() != null) {
 			p = new SortPlan(p, data.sortFields(), data.sortDirections(), tx);
 			ret.add("SortPlan (#blks=" + p.blocksAccessed()
-					+ ", #recs="+p.histogram().recordsOutput() + ")");
-			System.out.println("SortPlan (#blks=" + p.blocksAccessed()
 					+ ", #recs="+p.histogram().recordsOutput() + ")");
 		}
 		map.put(lv++, ret);
@@ -133,7 +119,8 @@ public class BasicQueryPlanner implements QueryPlanner {
 				ret += arr;
 				ret += s + "\n";
 			}
-			tabspace += 4;
+			if (map.get(lv).size() > 0)
+				tabspace += 4;
 			lv--;
 		}
 		return ret;

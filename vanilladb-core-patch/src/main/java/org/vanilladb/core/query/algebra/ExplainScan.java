@@ -28,23 +28,14 @@ public class ExplainScan implements Scan {
 
 	@Override
 	public boolean next() {
-		System.out.println("Status in EXPSCAN = " + status);
 		if (status == 0) {
-			status++;
-			return s.next();
-		}
-		else if (status == 1) {
-			status++;
-
-			recsCt = 0;
 			while (s.next()) {
 				recsCt++;
 			}
-			return true;
-		}
-		else {
 			status++;
-			return s.next();
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -55,14 +46,8 @@ public class ExplainScan implements Scan {
 
 	@Override
 	public Constant getVal(String fldName) {
-		if (status < 2) {
-			String ret = "\nStatus: " + status + explainResult
-						+ "\n\n" + "Actual #recs: " + recsCt;
-			return Constant.newInstance(Type.VARCHAR(500), ret.getBytes());
-		} else {
-			String ret = "Actual #recs: " + recsCt;
-			return Constant.newInstance(Type.VARCHAR(500), ret.getBytes());
-		}
+		String ret = explainResult + "\n" + "Actual #recs: " + recsCt;
+		return Constant.newInstance(Type.VARCHAR(500), ret.getBytes());	
 	}
 
 	@Override
