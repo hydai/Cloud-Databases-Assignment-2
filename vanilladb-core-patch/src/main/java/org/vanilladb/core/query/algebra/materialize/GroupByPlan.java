@@ -227,6 +227,12 @@ public class GroupByPlan extends ReduceRecordsPlan {
 	private Schema schema;
 	private Histogram hist;
 
+	public Plan getSp() {
+		return sp;
+	}
+	public boolean isGroupFldsEmpty() {
+		return this.groupFlds.isEmpty();
+	}
 	/**
 	 * Creates a group-by plan for the underlying query. The grouping is
 	 * determined by the specified collection of group fields, and the
